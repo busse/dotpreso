@@ -10,7 +10,7 @@ dotpreso runs TypeScript directly under Node 22.18 or later, and depends on dots
 
 ```sh
 git clone https://github.com/busse/dotscene.git
-git clone https://github.com/busse/dotpreso-public.git dotpreso
+git clone https://github.com/busse/dotpreso.git
 cd dotpreso
 npm install
 npm run dev fox-goose-grain      # build the example deck, serve it, rebuild on save
@@ -117,4 +117,4 @@ Re-run `publish` after any change; a push is a deploy. Pages serves the `main` b
 
 ## Feedback and changes
 
-Bugs, ideas and adjustments go through [GitHub Issues](https://github.com/busse/dotpreso-public/issues); changes through pull requests. See [CONTRIBUTING.md](CONTRIBUTING.md).
+Bugs, ideas and adjustments go through [GitHub Issues](https://github.com/busse/dotpreso/issues); changes through pull requests. See [CONTRIBUTING.md](CONTRIBUTING.md).

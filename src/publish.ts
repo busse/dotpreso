@@ -69,7 +69,7 @@ ${publish.notes === true ? '| s | speaker notes |\n| p | presenter window |\n' :
 ${deck.slides.some((slide) => (slide.cites?.length ?? 0) > 0) ? "Every claim is cited on its slide; the sources are linked in each slide's footer.\n" : ''}
 ---
 
-Built with [dotpreso](https://github.com/busse/dotpreso-public) (${source}). Illustrations drawn and animated with [dotscene](https://github.com/busse/dotscene).
+Built with [dotpreso](https://github.com/busse/dotpreso) (${source}). Illustrations drawn and animated with [dotscene](https://github.com/busse/dotscene).
 `
 
 /** The commit the copy was built from, marked if the working tree had changes. */

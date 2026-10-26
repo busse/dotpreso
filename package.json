@@ -8,10 +8,10 @@
   "author": "busse",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/busse/dotpreso-public.git"
+    "url": "git+https://github.com/busse/dotpreso.git"
   },
   "bugs": {
-    "url": "https://github.com/busse/dotpreso-public/issues"
+    "url": "https://github.com/busse/dotpreso/issues"
   },
   "bin": {
     "dotpreso": "./bin/dotpreso.js"
