@@ -1,0 +1,55 @@
+{
+  "name": "dotpreso",
+  "version": "0.1.0",
+  "description": "Forward/back HTML slide decks whose illustrations animate between slides",
+  "type": "module",
+  "private": true,
+  "license": "MIT",
+  "author": "busse",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/busse/dotpreso-public.git"
+  },
+  "bugs": {
+    "url": "https://github.com/busse/dotpreso-public/issues"
+  },
+  "bin": {
+    "dotpreso": "./bin/dotpreso.js"
+  },
+  "exports": {
+    ".": "./src/deck.ts",
+    "./theme": "./src/theme.ts",
+    "./build": "./src/build.ts",
+    "./figures/*": "./figures/*.ts",
+    "./themes/*": "./themes/*/theme.ts"
+  },
+  "files": [
+    "src",
+    "figures",
+    "themes",
+    "scripts",
+    "bin"
+  ],
+  "scripts": {
+    "build": "node src/cli.ts build",
+    "present": "node src/cli.ts present",
+    "dev": "node src/cli.ts dev",
+    "export": "node src/cli.ts export",
+    "publish": "node src/cli.ts publish",
+    "preview": "node node_modules/dotscene/bin/dotscene.js preview",
+    "check": "node node_modules/dotscene/bin/dotscene.js check --dir decks && node scripts/framing.ts",
+    "framing": "node scripts/framing.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "dotscene": "file:../dotscene"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "esbuild": "^0.28.2",
+    "typescript": "^5.7.2"
+  },
+  "engines": {
+    "node": ">=22.18"
+  }
+}

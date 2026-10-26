@@ -1,0 +1,289 @@
+/*
+ * The player's frame. Deck-agnostic: a deck themes it by setting these custom properties
+ * in its own `css`, and lays out its copy with its own classes.
+ */
+:root {
+  --paper: #fbfaf7;
+  --ink: #1d2021;
+  --muted: #656c6f;
+  --accent: #0b6580;
+  --rule: #dbd9d2;
+  --letterbox: var(--paper);
+  --font-display: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-text: Georgia, "Times New Roman", serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
+  color-scheme: light;
+}
+
+html,
+body {
+  margin: 0;
+  height: 100%;
+  background: var(--letterbox);
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+}
+
+.deck {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  background: var(--letterbox);
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* A 1600 × 900 stage, scaled to fit the window. Everything inside is laid out in stage pixels. */
+.stage {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 1600px;
+  height: 900px;
+  transform: translate(-50%, -50%) scale(var(--scale, 1));
+  background: var(--paper);
+  overflow: hidden;
+}
+
+.layers,
+.layer,
+.slides,
+.slide {
+  position: absolute;
+  inset: 0;
+}
+
+.layer {
+  opacity: 0;
+  transition: opacity 0.6s ease;
+}
+.layer.on {
+  opacity: 1;
+}
+.deck:not(.ready) .layer {
+  opacity: 0;
+}
+.layer svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.slides {
+  pointer-events: none;
+}
+.slide a {
+  pointer-events: auto;
+  color: inherit;
+}
+/* A video on the slide showing takes its own clicks (play, scrub, volume); hidden slides' don't. */
+.slide.active video {
+  pointer-events: auto;
+}
+
+/* Copy leaves quickly and arrives once the illustration has mostly got where it is going. */
+.slide .copy,
+.slide .cites {
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+.slide.active .copy,
+.slide.active .cites {
+  opacity: 1;
+  transition: opacity 0.55s ease var(--enter-delay, 0ms);
+}
+
+/* Marked `.after`: appears once the scene has finished moving — a label on something drawn in. */
+.slide .after {
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+.slide.active .after {
+  opacity: 1;
+  transition: opacity 0.5s ease var(--arrive, 0ms);
+}
+
+.cites {
+  position: absolute;
+  left: 96px;
+  right: 180px;
+  bottom: 30px;
+  font: 400 14px/1.5 var(--font-mono);
+  color: var(--muted);
+}
+.cites ol {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: cite;
+}
+.cites li {
+  counter-increment: cite;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.cites li::before {
+  content: "[" counter(cite) "] ";
+  color: var(--accent);
+}
+.cites a {
+  text-decoration: none;
+  border-bottom: 1px solid var(--rule);
+}
+
+.chrome {
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 0;
+}
+.progress {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 4px;
+}
+.progress span {
+  display: block;
+  height: 100%;
+  width: 0;
+  background: var(--accent);
+  transition: width 0.4s ease;
+}
+.counter {
+  position: absolute;
+  right: 40px;
+  bottom: 30px;
+  font: 500 15px/1 var(--font-mono);
+  color: var(--muted);
+  letter-spacing: 0.04em;
+}
+
+.speaker {
+  position: absolute;
+  top: 24px;
+  right: 24px;
+  width: 560px;
+  max-height: 600px;
+  overflow: auto;
+  padding: 24px 28px;
+  background: var(--ink);
+  color: var(--paper);
+  font: 400 22px/1.45 var(--font-text);
+  border-radius: 6px;
+  box-shadow: 0 12px 40px rgb(0 0 0 / 0.25);
+  user-select: text;
+  -webkit-user-select: text;
+}
+.speaker h2 {
+  margin: 0 0 12px;
+  font: 600 14px/1 var(--font-mono);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  opacity: 0.7;
+}
+.speaker p {
+  margin: 0 0 0.8em;
+}
+.speaker-next {
+  font: 400 15px/1.4 var(--font-mono);
+  opacity: 0.7;
+}
+
+.deck.blank .stage::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--ink);
+  z-index: 10;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .layer,
+  .slide .copy,
+  .slide .cites,
+  .slide.active .copy,
+  .slide.active .cites,
+  .progress span {
+    transition: none;
+  }
+}
+
+/* ── the presenter's window (`?presenter`): notes, next slide, a clock; no stage ───────── */
+.deck.presenter {
+  background: var(--ink);
+  color: var(--paper);
+  user-select: text;
+  -webkit-user-select: text;
+}
+.deck.presenter .stage,
+.deck.presenter .speaker {
+  display: none;
+}
+.presenter-view {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 36px 56px 32px;
+  box-sizing: border-box;
+  font: 400 26px/1.45 var(--font-text);
+}
+.presenter-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 18px;
+  font: 500 18px/1 var(--font-mono);
+  letter-spacing: 0.08em;
+  opacity: 0.75;
+}
+.presenter-clock {
+  all: unset;
+  cursor: pointer;
+  font: 600 40px/1 var(--font-mono);
+  letter-spacing: 0.04em;
+  opacity: 1;
+}
+.presenter-title {
+  margin: 0 0 20px;
+  font: 700 36px/1.15 var(--font-display);
+  letter-spacing: -0.01em;
+  text-wrap: balance;
+}
+.presenter-notes {
+  flex: 1;
+  overflow: auto;
+  padding-right: 12px;
+}
+.presenter-notes p {
+  margin: 0 0 0.75em;
+}
+.presenter-next {
+  margin: 20px 0 0;
+  padding-top: 18px;
+  border-top: 1px solid rgb(255 255 255 / 0.18);
+  font: 400 19px/1.4 var(--font-mono);
+  opacity: 0.7;
+}
+
+/* ── `?debug`: the horizon, and the box the copy occupies ─────────────────────────────── */
+.debug-horizon {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 0;
+  border-top: 1px dashed rgb(220 40 40 / 0.7);
+  pointer-events: none;
+  z-index: 5;
+}
+.deck.debug .slide.active .text {
+  outline: 1px dashed rgb(220 40 40 / 0.7);
+  outline-offset: 2px;
+}
+
+/* A footer the copy never points at: one line, no number. */
+.cites.plain li::before {
+  content: none;
+}
